@@ -1,14 +1,26 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { OnboardingProvider } from "@/contexts/OnboardingContext";
+import { OnboardingSidebar } from "@/components/OnboardingSidebar";
+import { ProfileInformation } from "@/components/steps/ProfileInformation";
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
-const Index = () => {
+function OnboardingContent() {
+  const { currentStep } = useOnboarding();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="flex-1 min-h-screen">
+      {currentStep === 1 && <ProfileInformation />}
+      {/* Other steps will be added in subsequent iterations */}
     </div>
   );
-};
+}
 
-export default Index;
+export default function Index() {
+  return (
+    <OnboardingProvider>
+      <div className="flex min-h-screen">
+        <OnboardingSidebar />
+        <OnboardingContent />
+      </div>
+    </OnboardingProvider>
+  );
+}
