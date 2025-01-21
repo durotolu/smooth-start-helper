@@ -1,26 +1,19 @@
-import { Trophy } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useOnboarding } from "@/contexts/OnboardingContext";
+import { Button } from "@/components/ui/button";
+import { CheckCircle } from "lucide-react";
 
 export function Success() {
   const { formData } = useOnboarding();
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto p-6 text-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-          <Trophy className="h-6 w-6 text-primary" />
-        </div>
-        <h2 className="text-2xl font-semibold tracking-tight">Setup Complete!</h2>
-        <p className="text-muted-foreground">
-          Congratulations {formData.firstName}, your business account has been successfully set up.
+    <div className="flex-1 p-8 flex flex-col items-center justify-center">
+      <div className="text-center max-w-xl">
+        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
+        <h2 className="text-2xl font-bold mb-4">Registration Complete!</h2>
+        <p className="text-gray-600 mb-8">
+          Thank you {formData.firstName} for completing the registration process. We'll review your information and get back to you shortly.
         </p>
-      </div>
-
-      <div className="mt-8">
-        <Button className="w-full md:w-auto">
-          Go to Dashboard
-        </Button>
+        <Button onClick={() => window.location.reload()}>Return to Home</Button>
       </div>
     </div>
   );

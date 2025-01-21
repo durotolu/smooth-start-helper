@@ -1,54 +1,49 @@
-import { User, Building2, FileCheck, Calculator, BarChart3, Trophy } from "lucide-react";
 import { useOnboarding } from "@/contexts/OnboardingContext";
 import { cn } from "@/lib/utils";
-
-const steps = [
-  { id: 1, title: "Profile Information", subtitle: "Personal details", icon: User },
-  { id: 2, title: "Business Details", subtitle: "About your company", icon: Building2 },
-  { id: 3, title: "Business License", subtitle: "Legal documentation", icon: FileCheck },
-  { id: 4, title: "Tax Compliance", subtitle: "Tax information", icon: Calculator },
-  { id: 5, title: "Business Operations", subtitle: "Day-to-day details", icon: BarChart3 },
-  { id: 6, title: "Success", subtitle: "All set up!", icon: Trophy },
-];
 
 export function OnboardingSidebar() {
   const { currentStep } = useOnboarding();
 
+  const steps = [
+    { number: 1, title: "Profile Information" },
+    { number: 2, title: "Business Details" },
+    { number: 3, title: "Business License" },
+    { number: 4, title: "Tax Compliance" },
+    { number: 5, title: "Business Operations" },
+    { number: 6, title: "Success" },
+  ];
+
   return (
-    <div className="hidden md:flex flex-col w-80 bg-secondary/30 min-h-screen p-6 border-r">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold">Untitled UI</h1>
-      </div>
-      
-      <div className="space-y-6">
-        {steps.map((step) => {
-          const isActive = currentStep === step.id;
-          const isCompleted = currentStep > step.id;
-          
-          return (
-            <div
-              key={step.id}
+    <div className="w-64 bg-gray-50 p-6 border-r">
+      <h2 className="text-xl font-semibold mb-6">Registration Steps</h2>
+      <div className="space-y-4">
+        {steps.map((step) => (
+          <div
+            key={step.number}
+            className={cn(
+              "flex items-center space-x-3 p-2 rounded",
+              currentStep === step.number
+                ? "bg-primary text-primary-foreground"
+                : currentStep > step.number
+                ? "text-gray-600"
+                : "text-gray-400"
+            )}
+          >
+            <span
               className={cn(
-                "flex items-start gap-4",
-                isActive && "text-primary",
-                isCompleted && "text-muted-foreground"
+                "w-6 h-6 rounded-full flex items-center justify-center text-sm",
+                currentStep === step.number
+                  ? "bg-primary-foreground text-primary"
+                  : currentStep > step.number
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-gray-600"
               )}
             >
-              <div className={cn(
-                "w-8 h-8 rounded-full border flex items-center justify-center",
-                isActive && "border-primary bg-primary/10",
-                isCompleted && "border-muted bg-muted"
-              )}>
-                <step.icon className="w-4 h-4" />
-              </div>
-              
-              <div>
-                <h3 className="font-medium">{step.title}</h3>
-                <p className="text-sm text-muted-foreground">{step.subtitle}</p>
-              </div>
-            </div>
-          );
-        })}
+              {currentStep > step.number ? "✓" : step.number}
+            </span>
+            <span className="text-sm font-medium">{step.title}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

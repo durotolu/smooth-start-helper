@@ -1,118 +1,54 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useOnboarding } from "@/contexts/OnboardingContext";
-
-const formSchema = z.object({
-  businessName: z.string().min(2, "Business name must be at least 2 characters"),
-  businessType: z.string().min(2, "Please select a business type"),
-  businessAddress: z.string().min(5, "Please enter a valid address"),
-});
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function BusinessDetails() {
   const { formData, updateFormData, setCurrentStep } = useOnboarding();
-  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      businessName: formData.businessName || "",
-      businessType: formData.businessType || "",
-      businessAddress: formData.businessAddress || "",
-    },
-  });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    updateFormData(values);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     setCurrentStep(3);
-  }
+  };
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto p-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Business Details</h2>
-        <p className="text-muted-foreground">
-          Tell us about your company
-        </p>
-      </div>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="businessName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Business Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Acme Inc." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="businessType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Business Type</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select business type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="sole-proprietorship">Sole Proprietorship</SelectItem>
-                    <SelectItem value="partnership">Partnership</SelectItem>
-                    <SelectItem value="corporation">Corporation</SelectItem>
-                    <SelectItem value="llc">LLC</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="businessAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Business Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="123 Business St, City, State, ZIP" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex justify-end">
-            <Button type="submit" className="w-full md:w-auto">
-              Continue
-            </Button>
+    <div className="flex-1 p-8">
+      <h2 className="text-2xl font-bold mb-6">Business Details</h2>
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="businessName">Business Name</Label>
+            <Input
+              id="businessName"
+              value={formData.businessName || ''}
+              onChange={(e) => updateFormData({ businessName: e.target.value })}
+              required
+            />
           </div>
-        </form>
-      </Form>
+          <div>
+            <Label htmlFor="businessType">Business Type</Label>
+            <Input
+              id="businessType"
+              value={formData.businessType || ''}
+              onChange={(e) => updateFormData({ businessType: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="businessAddress">Business Address</Label>
+            <Input
+              id="businessAddress"
+              value={formData.businessAddress || ''}
+              onChange={(e) => updateFormData({ businessAddress: e.target.value })}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <Button type="button" variant="outline" onClick={() => setCurrentStep(1)}>Previous</Button>
+          <Button type="submit">Next Step</Button>
+        </div>
+      </form>
     </div>
   );
 }
